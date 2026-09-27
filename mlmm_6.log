@@ -1,0 +1,47 @@
+<span class="stinp">. mixed math homework ses c.ratio##schtype || schid: , stddev</span>
+
+Mixed-effects ML regression                          Number of obs    = <span class="stres">   519</span>
+Group variable: <span class="stres">schid                                </span>Number of groups = <span class="stres">    23</span>
+                                                     Obs per group:
+                                                                  min = <span class="stres">     5</span>
+                                                                  avg = <span class="stres">  22.6</span>
+                                                                  max = <span class="stres">    67</span>
+<span class="stres">                                                     </span>Wald chi2(<span class="stres">5</span>)     = <span class="stres">138.17</span>
+Log likelihood = <span class="stres">-1841.9495                          </span>Prob &gt; chi2      = <span class="stres">0.0000</span>
+
+---------------------------------------------------------------------------------
+           math | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       homework |<span class="stres">   2.161546   .2692844     8.03   0.000     1.633758    2.689333</span>
+            ses |<span class="stres">   3.674275   .5621845     6.54   0.000     2.572414    4.776137</span>
+          ratio |<span class="stres">   .2074699   .2005317     1.03   0.301    -.1855651    .6005048</span>
+                |
+        schtype |
+       Private  |<span class="stres">          0</span>  (base)
+        Public  |<span class="stres">   8.212978   5.903493     1.39   0.164    -3.357655    19.78361</span>
+                |
+schtype#c.ratio |
+        Public  |<span class="stres">  -.5638342   .3246283    -1.74   0.082    -1.200094    .0724256</span>
+                |
+          _cons |<span class="stres">   44.42809   3.956943    11.23   0.000     36.67262    52.18356</span>
+---------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+<span class="stres">schid</span>: Identity              |
+                   sd(_cons) |<span class="stres">   3.055324    .619038      2.053977    4.544842</span>
+-----------------------------+------------------------------------------------
+                sd(Residual) |<span class="stres">   8.164963    .259254      7.672323    8.689236</span>
+------------------------------------------------------------------------------
+LR test vs. linear model: chibar2(01) = <span class="stres">33.06         </span>Prob &gt;= chibar2 = <span class="stres">0.0000</span>
+
+<span class="stinp">. estat icc</span>
+
+Residual intraclass correlation
+
+------------------------------------------------------------------------------
+                       Level |        ICC   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+                       schid |<span class="stres">   .1228263   .0445853      .0585792    .2396032</span>
+------------------------------------------------------------------------------

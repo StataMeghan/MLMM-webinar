@@ -1,0 +1,38 @@
+<span class="stinp">. xtset schid</span>
+
+Panel variable: <span class="stres">schid</span> (unbalanced)
+
+<span class="stinp">. xtreg math homework ses c.ratio##schtype, mle</span>
+
+Random-effects ML regression                         Number of obs    = <span class="stres">   519</span>
+Group variable: <span class="stres">schid</span>                                Number of groups = <span class="stres">    23</span>
+
+Random effects u_i ~ Gaussian                        Obs per group:
+                                                                  min = <span class="stres">     5</span>
+                                                                  avg = <span class="stres">  22.6</span>
+                                                                  max = <span class="stres">    67</span>
+
+                                                     LR chi2(<span class="stres">5</span>)       = <span class="stres">116.88</span>
+Log likelihood = <span class="stres">-1841.9495</span>                          Prob &gt; chi2      = <span class="stres">0.0000</span>
+
+---------------------------------------------------------------------------------
+           math | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       homework |<span class="stres">   2.161546   .2692851     8.03   0.000     1.633757    2.689335</span>
+            ses |<span class="stres">   3.674275   .5706132     6.44   0.000     2.555893    4.792656</span>
+          ratio |<span class="stres">   .2074699   .2007692     1.03   0.301    -.1860306    .6009704</span>
+                |
+        schtype |
+       Private  |<span class="stres">          0</span>  (base)
+        Public  |<span class="stres">   8.212979   5.905771     1.39   0.164    -3.362121    19.78808</span>
+                |
+schtype#c.ratio |
+        Public  |<span class="stres">  -.5638343   .3249251    -1.74   0.083    -1.200676    .0730072</span>
+                |
+          _cons |<span class="stres">   44.42809   3.959143    11.22   0.000     36.66831    52.18787</span>
+----------------+----------------------------------------------------------------
+       /sigma_u |<span class="stres">   3.055326   .6190318                      2.053988    4.544827</span>
+       /sigma_e |<span class="stres">   8.164963    .259254                      7.672323    8.689236</span>
+            rho |<span class="stres">   .1228265   .0445849                      .0558368    .2323195</span>
+---------------------------------------------------------------------------------
+LR test of sigma_u=0: chibar2(01) = <span class="stres">33.06              </span>Prob &gt;= chibar2 = <span class="stres">0.000</span>

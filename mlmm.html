@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>Intro to MLMM</title>
+
+        <link rel="stylesheet" href="dist/reset.css" />
+        <link rel="stylesheet" href="dist/reveal.css" />
+        <link rel="stylesheet" href="stata-webinar.css" />
+        <link rel="stylesheet" href="dist/monokai.css" />
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+
+                <section class="column-slide title-slide">
+                    <h1>Introduction to multilevel modeling using Stata</h1>
+                    <hr>
+                    <p class="author">Meghan Cain, PhD</p>
+                    <p class="role">Director of Educational Services at StataCorp</p>
+                    <p class="date">October 20, 2026</p>
+                    <img src="png/logo19-white.svg" alt="Stata Logo" class="stata-logo">
+                </section>
+
+                <section>
+                    <h1>Outline</h1>
+                    <div class="outline-grid">
+                        <!-- Card 1 -->
+                        <div class="text-box outline-card">
+                            <p class="card-title">Nested data structures</p>
+                            <img src="png/nesting.svg" alt="Nested data" class="card-image">
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="text-box outline-card">
+                            <p class="card-title">Random effects</p>
+                            <img src="png/inference.svg" alt="Random effects" class="card-image">
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="text-box outline-card">
+                            <p class="card-title">Multilevel models</p>
+                            <img src="png/mlmm.svg" alt="Multilevel models" class="card-image">
+                        </div>
+
+                        <!-- Card 4 (With Mini Stata Log) -->
+                        <div class="text-box outline-card">
+    <p class="card-title">Basic syntax in Stata</p>
+    <div class="stata-example mini-stata-example">
+        <pre class="stlog" style="font-size: 0.30em; margin: 0;"><samp>. xtreg math homework 
+. mixed math homework || schid:</samp></pre>
+    </div>      
+</div>
+
+                        <!-- Card 5 -->
+                        <div class="text-box outline-card">
+                            <p class="card-title">Model interpretation</p>
+                            <img src="mlmm_8.svg" alt="Interpretation" class="card-image">
+                        </div>
+
+                        <!-- Card 6 -->
+                        <div class="text-box outline-card">
+                            <p class="card-title">Two examples</p>
+                            <img src="mlmm_12.svg" alt="Two examples" class="card-image">
+                        </div>
+                    </div>
+                </section>  
+
+                <section class="column-slide">
+                    <h1>Nested data structures</h1>
+                    <div class="twocolumn">
+                        <div>
+                            <img src="png/nesting.svg" alt="Nesting Data Structures Diagram">
+                        </div>
+                        <div>
+                            <ul>
+                                <li>Observations are grouped into higher-level units, called clusters or groups.</li>
+                                <li>Observations within a cluster are correlated.</li>
+                                <li>Classic nesting examples</li>
+                                <ul>
+                                    <li>Students within schools</li>
+                                    <li>Patients within doctors</li>
+                                    <li>Employees within companies</li>
+                                    <li>Repeated measurements within individuals</li>
+                                </ul>
+                                <li>Data can be collected at the observation level or the cluster level.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="column-slide">
+                    <h1>The dataset</h1>
+                    <ul>
+                        <li>In this dataset, we have 519 students (level 1) nested within 23 schools (level 2).</li>
+                    </ul>
+                    <div class="stata-example">
+<pre id="stlog-1" class="stlog"><samp><span class="stinp">. use math </span>
+
+<span class="stinp">. list in 50/60, sepby(schid)</span>
+
+     +---------------------------------------------------+
+     | <span class="stres">schid     ses   homework   schtype   ratio   math </span>|
+     |---------------------------------------------------|
+ 50. | <span class="stres"> 6327     .56          1   Private      23     56 </span>|
+ 51. | <span class="stres"> 6327       1          1   Private      23     61 </span>|
+ 52. | <span class="stres"> 6327    -.44          3   Private      23     39 </span>|
+     |---------------------------------------------------|
+ 53. | <span class="stres"> 6467    -.27          0   Private      19     42 </span>|
+ 54. | <span class="stres"> 6467   -1.07          1   Private      19     46 </span>|
+ 55. | <span class="stres"> 6467     -.3          3   Private      19     61 </span>|
+ 56. | <span class="stres"> 6467    -.49          3   Private      19     67 </span>|
+ 57. | <span class="stres"> 6467    1.16          4   Private      19     67 </span>|
+     |---------------------------------------------------|
+ 58. | <span class="stres"> 7194     .25          0    Public      21     42 </span>|
+ 59. | <span class="stres"> 7194    -.53          0    Public      21     43 </span>|
+ 60. | <span class="stres"> 7194    -.89          0    Public      21     62 </span>|
+     +---------------------------------------------------+
+
+<span class="stinp">. codebook schid</span>
+
+------------------------------------------------------------------------------------------
+<span class="stres">schid                                                                            School ID</span>
+------------------------------------------------------------------------------------------
+
+                  Type: Numeric (<span class="stres">float</span>)
+
+                 Range: [<span class="stres">6053</span>,<span class="stres">72991</span>]                  Units: <span class="stres">1</span>
+<span class="stres">         </span>Unique values: <span class="stres">23                        </span>Missing .: <span class="stres">0</span>/<span class="stres">519</span>
+
+                  Mean: <span class="stres">35488.7</span>
+             Std. dev.: <span class="stres">26056.7</span>
+
+           Percentiles:     10%       25%       50%       75%       90%
+<span class="stres">                           6327      7801     25642     62821     72080</span>
+</samp></pre>
+                    </div>
+                </section>
+
+                <section class="column-slide">
+                    <h1>Linear regression</h1>
+                    <ul>
+                        <li>We can use linear regression to estimate the relationship between a student's math score and the number of hours they spend on math homework each week, controlling for socioeconomic status, the student-teacher ratio of their school, and whether their school is public or private.</li>
+                    </ul>   
+                    <div class="twocolumn">
+                        <div>
+                            <div class="stata-example">
+<pre id="stlog-2" class="stlog"><samp><span class="stinp">. regress math homework ses c.ratio##schtype</span>
+
+      Source |       SS           df       MS      Number of obs   =<span class="stres">       519</span>
+-------------+----------------------------------   F(5, 513)       = <span class="stres">    52.99</span>
+       Model | <span class="stres"> 20232.8571         5  4046.57141   </span>Prob &gt; F        =<span class="stres">    0.0000</span>
+    Residual | <span class="stres"> 39175.1892       513  76.3648912   </span>R-squared       =<span class="stres">    0.3406</span>
+-------------+----------------------------------   Adj R-squared   =<span class="stres">    0.3341</span>
+       Total | <span class="stres"> 59408.0462       518  114.687348   </span>Root MSE        =   <span class="stres"> 8.7387</span>
+
+---------------------------------------------------------------------------------
+           math | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       homework |<span class="stres">   2.234407   .2775453     8.05   0.000     1.689142    2.779672</span>
+            ses |<span class="stres">   4.462329   .5643353     7.91   0.000     3.353637    5.571022</span>
+          ratio |<span class="stres">   .0741481   .1020049     0.73   0.468    -.1262507    .2745469</span>
+                |
+        schtype |
+       Private  |<span class="stres">          0</span>  (base)
+        Public  |<span class="stres">     5.3203   3.141853     1.69   0.091    -.8521821    11.49278</span>
+                |
+schtype#c.ratio |
+        Public  |<span class="stres">  -.3979843   .1712856    -2.32   0.021    -.7344918   -.0614768</span>
+                |
+          _cons |<span class="stres">   46.96202   2.101312    22.35   0.000     42.83378    51.09026</span>
+---------------------------------------------------------------------------------
+</samp></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="stata-example">
+                                <pre id="stlog-3" class="stlog"><samp><span class="stinp">. quietly  margins, at(homework=(0/7)) plot</span></samp></pre>
+                                <figure id="fig-3">
+                                    <a href="mlmm_3.svg"><img alt="mlmm_3.svg" src="mlmm_3.svg"/></a>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fragment fade-in-then-out pop-up-box">
+                        <p>Two problems:</p>
+                        <ol>
+                            <li>We have a nested data structure, which violates the independence assumption of linear regression.</li>
+                            <li>We want to answer questions about both the individual and cluster levels.</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <section class="column-slide">
+                    <h1>Problem 1</h1>
+                    <ul>
+                        <li>Nested data structures violate the independence assumption of linear regression, leading to:</li>
+                        <ul>
+                            <li>biased standard errors</li>
+                            <li>biased test statistics</li>
+                            <li>inflated Type I error rates</li>
+                        </ul>
+                        <li>The easiest solution is to use cluster-robust standard errors to correct the standard errors and test statistics of the regression coefficients.</li>
+                    </ul>
+                    <div class="stata-example">
+<pre id="stlog-4" class="stlog"><samp><span class="stinp">. regress math homework ses c.ratio##schtype, vce(cluster schid)</span>
+
+Linear regression                               Number of obs     = <span class="stres">       519</span>
+<span class="stres">                                                </span>F(5, 22)          =  <span class="stres">    36.41</span>
+<span class="stres">                                                </span>Prob &gt; F          = <span class="stres">    0.0000</span>
+<span class="stres">                                                </span>R-squared         = <span class="stres">    0.3406</span>
+<span class="stres">                                                </span>Root MSE          =    <span class="stres"> 8.7387</span>
+
+                                    (Std. err. adjusted for <span class="stres">23</span> clusters in <span class="stres">schid</span>)
+---------------------------------------------------------------------------------
+                |               Robust
+           math | Coefficient  std. err.      t    P&gt;|t|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       homework |<span class="stres">   2.234407   .5931955     3.77   0.001     1.004195    3.464619</span>
+            ses |<span class="stres">   4.462329   .7662626     5.82   0.000     2.873198    6.051461</span>
+          ratio |<span class="stres">   .0741481   .2716558     0.27   0.787    -.4892315    .6375278</span>
+                |
+        schtype |
+       Private  |<span class="stres">          0</span>  (base)
+        Public  |<span class="stres">     5.3203   6.666345     0.80   0.433    -8.504853    19.14545</span>
+                |
+schtype#c.ratio |
+        Public  |<span class="stres">  -.3979843   .3025005    -1.32   0.202    -1.025332    .2293634</span>
+                |
+          _cons |<span class="stres">   46.96202    6.67312     7.04   0.000     33.12282    60.80122</span>
+---------------------------------------------------------------------------------
+</samp></pre>
+                    </div>
+                </section>
+
+                <section class="column-slide">
+                    <h1>Problem 2</h1>
+                    <ul>
+                        <li>Linear regression doesn't allow us to answer questions about both the individual and cluster levels.</li>
+                        <li>For example, we might want to know:</li>
+                        <ul>
+                            <li>How much of a student's math score is dictated by their own characteristics versus the school they attend?</li>
+                            <li>Does the impact of a specialized math tutoring program on test scores vary from school to school?</li>
+                            <li>Does a student's own family income improve their grades, or does simply attending a school with a high average family income provide a separate, additional boost?</li>
+                        </ul>
+                        <li>The solution to this problem is to use multilevel/mixed-effects models (MLMMs).</li>
+                        <ul>
+                            <li>MLMMs provide correct standard errors and test statistics.</li>
+                            <li>MLMMs can model variation at both the individual and cluster levels.</li>
+                        </ul>
+                        <li>Also known as variance-component models or hierarchical linear models (HLM), this modeling framework incorporates both fixed and random effects.</li>
+                    </ul>
+                </section>
+
+                <section class="column-slide">
+                    <h1>Random effects</h1>
+                    <ul> 
+                        <li>Random effects are unobserved variables that capture the variation in the outcome variable at the cluster level. </li>
+                        <li>Just as we assume that the individuals are drawn from a population, we can also assume that the clusters are drawn from a population.</li>
+                    </ul> 
+                    <img src="png/inference.svg" alt="Random Effects Diagram" class="diagram-img">
+                </section>
+
+                <section class="column-slide">
+                    <h1>Multilevel/mixed-effects models (MLMMs)</h1> 
+                    <div class="twocolumn"> 
+                        <div>
+                            <p>MLMMs disaggregate the variance in the outcome variable into observation-level and cluster-level components.</p>
+                            <ul>
+                                <li><strong>Fixed-effect</strong> coefficients estimate average effects across all clusters.</li>
+                                <li><strong>Random-effect</strong> coefficients capture variation in the outcome variable at the cluster level.</li>
+                                <li><strong>Level-1 residuals</strong> capture the remaining variation in the outcome variable at the observation level.</li>
+                            </ul>
+                            $$y_{ij} = \beta_0 + \beta_1 x_{ij} + u_{0j} + u_{1j} x_{ij} + \epsilon_{ij}$$
+                        </div>
+                        <div>
+                            <img src="png/mlmm.svg" alt="MLMM Diagram" class="diagram-img">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="column-slide">
+                    <h1>MLMMs in Stata</h1>
+                    <p>There are two commands in Stata to fit multilevel models: <span class="stata-code">xtreg</span> and <span class="stata-code">mixed</span></p>
+                    <div class="twocolumn"> 
+                        <div>
+                            <p>The <span class="stata-code">xtreg</span> command is simpler to use and is suitable for basic random-intercept models.</p> 
+                            <div class="stata-example">
+<pre id="stlog-5" class="stlog"><samp><span class="stinp">. xtset schid</span>
+
+Panel variable: <span class="stres">schid</span> (unbalanced)
+
+<span class="stinp">. xtreg math homework ses c.ratio##schtype, mle</span>
+
+Random-effects ML regression                         Number of obs    = <span class="stres">   519</span>
+Group variable: <span class="stres">schid</span>                                Number of groups = <span class="stres">    23</span>
+
+Random effects u_i ~ Gaussian                        Obs per group:
+                                                                  min = <span class="stres">     5</span>
+                                                                  avg = <span class="stres">  22.6</span>
+                                                                  max = <span class="stres">    67</span>
+
+                                                     LR chi2(<span class="stres">5</span>)       = <span class="stres">116.88</span>
+Log likelihood = <span class="stres">-1841.9495</span>                          Prob &gt; chi2      = <span class="stres">0.0000</span>
+
+---------------------------------------------------------------------------------
+           math | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       homework |<span class="stres">   2.161546   .2692851     8.03   0.000     1.633757    2.689335</span>
+            ses |<span class="stres">   3.674275   .5706132     6.44   0.000     2.555893    4.792656</span>
+          ratio |<span class="stres">   .2074699   .2007692     1.03   0.301    -.1860306    .6009704</span>
+                |
+        schtype |
+       Private  |<span class="stres">          0</span>  (base)
+        Public  |<span class="stres">   8.212979   5.905771     1.39   0.164    -3.362121    19.78808</span>
+                |
+schtype#c.ratio |
+        Public  |<span class="stres">  -.5638343   .3249251    -1.74   0.083    -1.200676    .0730072</span>
+                |
+          _cons |<span class="stres">   44.42809   3.959143    11.22   0.000     36.66831    52.18787</span>
+----------------+----------------------------------------------------------------
+       /sigma_u |<span class="stres">   3.055326   .6190318                      2.053988    4.544827</span>
+       /sigma_e |<span class="stres">   8.164963    .259254                      7.672323    8.689236</span>
+            rho |<span class="stres">   .1228265   .0445849                      .0558368    .2323195</span>
+---------------------------------------------------------------------------------
+LR test of sigma_u=0: chibar2(01) = <span class="stres">33.06              </span>Prob &gt;= chibar2 = <span class="stres">0.000</span>
+</samp></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <p>The <span class="stata-code">mixed</span> command is more flexible and allows for more complex model specifications.</p>
+                            <div class="stata-example">
+<pre id="stlog-6" class="stlog"><samp><span class="stinp">. mixed math homework ses c.ratio##schtype || schid: , stddev</span>
+
+Mixed-effects ML regression                          Number of obs    = <span class="stres">   519</span>
+Group variable: <span class="stres">schid                                </span>Number of groups = <span class="stres">    23</span>
+                                                     Obs per group:
+                                                                  min = <span class="stres">     5</span>
+                                                                  avg = <span class="stres">  22.6</span>
+                                                                  max = <span class="stres">    67</span>
+<span class="stres">                                                     </span>Wald chi2(<span class="stres">5</span>)     = <span class="stres">138.17</span>
+Log likelihood = <span class="stres">-1841.9495                          </span>Prob &gt; chi2      = <span class="stres">0.0000</span>
+
+---------------------------------------------------------------------------------
+           math | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       homework |<span class="stres">   2.161546   .2692844     8.03   0.000     1.633758    2.689333</span>
+            ses |<span class="stres">   3.674275   .5621845     6.54   0.000     2.572414    4.776137</span>
+          ratio |<span class="stres">   .2074699   .2005317     1.03   0.301    -.1855651    .6005048</span>
+                |
+        schtype |
+       Private  |<span class="stres">          0</span>  (base)
+        Public  |<span class="stres">   8.212978   5.903493     1.39   0.164    -3.357655    19.78361</span>
+                |
+schtype#c.ratio |
+        Public  |<span class="stres">  -.5638342   .3246283    -1.74   0.082    -1.200094    .0724256</span>
+                |
+          _cons |<span class="stres">   44.42809   3.956943    11.23   0.000     36.67262    52.18356</span>
+---------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+<span class="stres">schid</span>: Identity              |
+                   sd(_cons) |<span class="stres">   3.055324    .619038      2.053977    4.544842</span>
+-----------------------------+------------------------------------------------
+                sd(Residual) |<span class="stres">   8.164963    .259254      7.672323    8.689236</span>
+------------------------------------------------------------------------------
+LR test vs. linear model: chibar2(01) = <span class="stres">33.06         </span>Prob &gt;= chibar2 = <span class="stres">0.0000</span>
+
+<span class="stinp">. estat icc</span>
+
+Residual intraclass correlation
+
+------------------------------------------------------------------------------
+                       Level |        ICC   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+                       schid |<span class="stres">   .1228263   .0445853      .0585792    .2396032</span>
+------------------------------------------------------------------------------
+</samp></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="column-slide">
+                    <h1>Interpretation of results</h1>
+                    <div class="twocolumn">
+                        <div>
+                            <p>We interpret the fixed-effect coefficients as the average expected change in the outcome with a one-unit increase in the predictor, holding all other predictors constant.</p>
+                            <div class="stata-example">
+                                <pre id="stlog-7" class="stlog"><samp><span class="stinp">. quietly margins, at(homework=(0/7)) plot</span></samp></pre>
+                                <figure id="fig-7">
+                                    <a href="mlmm_7.svg"><img alt="mlmm_7.svg" src="mlmm_7.svg"/></a>
+                                </figure>
+                            </div>
+                        </div>
+                        <div>
+                            <p>We interpret the random-effects as the difference between the average effect across all clusters and the effect in that particular cluster.</p>
+                            <div class="stata-example">
+<pre id="stlog-8" class="stlog"><samp><span class="stinp">. predict u, reffects reses(s)</span>
+
+<span class="stinp">. egen tagme = tag(schid)</span>
+
+<span class="stinp">. egen rank = rank(u) if tagme</span>
+(496 missing values generated)
+
+<span class="stinp">. serrbar u s rank if tagme, scale(1.96) yline(0) mvopts(mlabel(schid))</span>
+</samp></pre>
+                                <figure id="fig-8">
+                                    <a href="mlmm_8.svg"><img alt="mlmm_8.svg" src="mlmm_8.svg"/></a>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="column-slide">
+                    <h1>Random-intercept models</h1>
+                    <div class="twocolumn">
+                        <div>
+                            <div class="stata-example">
+<pre id="stlog-9" class="stlog"><samp><span class="stinp">. mixed math homework || schid: , stddev</span>
+
+Mixed-effects ML regression                          Number of obs    = <span class="stres">   519</span>
+Group variable: <span class="stres">schid                                </span>Number of groups = <span class="stres">    23</span>
+                                                     Obs per group:
+                                                                  min = <span class="stres">     5</span>
+                                                                  avg = <span class="stres">  22.6</span>
+                                                                  max = <span class="stres">    67</span>
+<span class="stres">                                                     </span>Wald chi2(<span class="stres">1</span>)     = <span class="stres"> 75.32</span>
+Log likelihood = <span class="stres"> -1865.247                          </span>Prob &gt; chi2      = <span class="stres">0.0000</span>
+
+------------------------------------------------------------------------------
+        math | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    homework |<span class="stres">   2.401972   .2767745     8.68   0.000     1.859504     2.94444</span>
+       _cons |<span class="stres">   46.34945   1.141154    40.62   0.000     44.11283    48.58607</span>
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+<span class="stres">schid</span>: Identity              |
+                   sd(_cons) |<span class="stres">   4.497318   .7861623      3.192696    6.335042</span>
+-----------------------------+------------------------------------------------
+                sd(Residual) |<span class="stres">   8.434685   .2677724      7.925855    8.976181</span>
+------------------------------------------------------------------------------
+LR test vs. linear model: chibar2(01) = <span class="stres">94.71         </span>Prob &gt;= chibar2 = <span class="stres">0.0000</span>
+</samp></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="stata-example">
+<pre id="stlog-10" class="stlog"><samp><span class="stinp">. predict yhat1, fitted</span>
+
+<span class="stinp">. sort schid homework</span>
+
+<span class="stinp">. twoway (line yhat1 homework, connect(ascending))</span>
+</samp></pre>
+                                <figure id="fig-10">
+                                    <a href="mlmm_10.svg"><img alt="mlmm_10.svg" src="mlmm_10.svg"/></a>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="column-slide">
+                    <h1>Random-slope models</h1>
+                    <div class="twocolumn">
+                        <div>
+                            <div class="stata-example">
+<pre id="stlog-11" class="stlog"><samp><span class="stinp">. mixed math homework || schid: homework, cov(unstructured) stddev</span>
+
+Mixed-effects ML regression                          Number of obs    = <span class="stres">   519</span>
+Group variable: <span class="stres">schid                                </span>Number of groups = <span class="stres">    23</span>
+                                                     Obs per group:
+                                                                  min = <span class="stres">     5</span>
+                                                                  avg = <span class="stres">  22.6</span>
+                                                                  max = <span class="stres">    67</span>
+<span class="stres">                                                     </span>Wald chi2(<span class="stres">1</span>)     = <span class="stres">  4.81</span>
+Log likelihood = <span class="stres">-1819.5183                          </span>Prob &gt; chi2      = <span class="stres">0.0283</span>
+
+--------------------------------------------------------------------------------------
+                math | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]
+---------------------+----------------------------------------------------------------
+            homework |<span class="stres">   1.986881    .906006     2.19   0.028     .2111418     3.76262</span>
+               _cons |<span class="stres">   46.32253   1.719467    26.94   0.000     42.95244    49.69262</span>
+--------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+<span class="stres">schid</span>: Unstructured          |
+                sd(homework) |<span class="stres">   4.097111   .7128096      2.913311    5.761938</span>
+                   sd(_cons) |<span class="stres">   7.699646   1.297697      5.533621    10.71352</span>
+        corr(homework,_cons) |<span class="stres">  -.8289898   .0741118     -.9287627   -.6172109</span>
+-----------------------------+------------------------------------------------
+                sd(Residual) |<span class="stres">   7.300516   .2374073      6.849724    7.780974</span>
+------------------------------------------------------------------------------
+LR test vs. linear model: chi2(<span class="stres">3</span>) = <span class="stres">186.16                </span>Prob &gt; chi2 = <span class="stres">0.0000</span>
+
+Note: LR test is conservative and provided only for reference.
+</samp></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="stata-example">
+<pre id="stlog-12" class="stlog"><samp><span class="stinp">. predict yhat2, fitted</span>
+
+<span class="stinp">. sort schid homework</span>
+
+<span class="stinp">. twoway (line yhat2 homework, connect(ascending))</span>
+</samp></pre>
+                                <figure id="fig-12">
+                                    <a href="mlmm_12.svg"><img alt="mlmm_12.svg" src="mlmm_12.svg"/></a>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="column-slide">
+                    <h1>What's next</h1>
+                    <ul>
+                        <li>Estimation options</li>
+                        <li>Model comparison</li>
+                        <li>Assumptions and diagnostics</li>
+                        <li>Level-1 covariance structures</li>
+                        <li>The disaggregated model</li>
+                        <li>Longitudinal data analysis</li>
+                        <li>Generalized linear mixed models</li>
+                        <li>Three-level models</li>
+                    </ul>
+                    <h2>Learn it all in the full course</h2>
+                    <ul>
+                        <li>Multilevel/mixed models using Stata</li>
+                        <li>November 17-20, 2026</li>
+                        <li>11am-2:30pm CT</li>
+                        <li><a href="https://instats.org/seminar/multilevelmixed-models-using-stata">Enroll now!</a></li>
+                    </ul>
+                </section>
+
+                <section class="closing-slide">
+                    <div class="closing-content">
+                        <h1>Thank you!</h1>
+                        <p>Keep asking questions in the <a href="https://instats.org/seminar/introduction-to-multilevel-modeling-usin">Forum</a>.</p>
+                    </div>
+                    <img src="png/logo19-white.svg" alt="Stata Logo" class="stata-logo-bottom">
+                </section>
+
+            </div>
+        </div>      
+        <script src="dist/reveal.js"></script>
+        <script src="dist/notes.js"></script>
+        <script src="dist/markdown.js"></script>
+        <script src="dist/highlight.js"></script>
+        <script src="dist/math.js"></script>
+        <script>
+            Reveal.initialize({
+                hash: true,
+                plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.MathJax3],
+                width: "150%",
+                height: "150%",
+            });
+        </script>
+    </body>
+</html>

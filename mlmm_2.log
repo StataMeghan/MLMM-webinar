@@ -1,0 +1,25 @@
+<span class="stinp">. regress math homework ses c.ratio##schtype</span>
+
+      Source |       SS           df       MS      Number of obs   =<span class="stres">       519</span>
+-------------+----------------------------------   F(5, 513)       = <span class="stres">    52.99</span>
+       Model | <span class="stres"> 20232.8571         5  4046.57141   </span>Prob &gt; F        =<span class="stres">    0.0000</span>
+    Residual | <span class="stres"> 39175.1892       513  76.3648912   </span>R-squared       =<span class="stres">    0.3406</span>
+-------------+----------------------------------   Adj R-squared   =<span class="stres">    0.3341</span>
+       Total | <span class="stres"> 59408.0462       518  114.687348   </span>Root MSE        =   <span class="stres"> 8.7387</span>
+
+---------------------------------------------------------------------------------
+           math | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       homework |<span class="stres">   2.234407   .2775453     8.05   0.000     1.689142    2.779672</span>
+            ses |<span class="stres">   4.462329   .5643353     7.91   0.000     3.353637    5.571022</span>
+          ratio |<span class="stres">   .0741481   .1020049     0.73   0.468    -.1262507    .2745469</span>
+                |
+        schtype |
+       Private  |<span class="stres">          0</span>  (base)
+        Public  |<span class="stres">     5.3203   3.141853     1.69   0.091    -.8521821    11.49278</span>
+                |
+schtype#c.ratio |
+        Public  |<span class="stres">  -.3979843   .1712856    -2.32   0.021    -.7344918   -.0614768</span>
+                |
+          _cons |<span class="stres">   46.96202   2.101312    22.35   0.000     42.83378    51.09026</span>
+---------------------------------------------------------------------------------

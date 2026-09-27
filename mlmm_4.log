@@ -1,0 +1,26 @@
+<span class="stinp">. regress math homework ses c.ratio##schtype, vce(cluster schid)</span>
+
+Linear regression                               Number of obs     = <span class="stres">       519</span>
+<span class="stres">                                                </span>F(5, 22)          =  <span class="stres">    36.41</span>
+<span class="stres">                                                </span>Prob &gt; F          = <span class="stres">    0.0000</span>
+<span class="stres">                                                </span>R-squared         = <span class="stres">    0.3406</span>
+<span class="stres">                                                </span>Root MSE          =    <span class="stres"> 8.7387</span>
+
+                                    (Std. err. adjusted for <span class="stres">23</span> clusters in <span class="stres">schid</span>)
+---------------------------------------------------------------------------------
+                |               Robust
+           math | Coefficient  std. err.      t    P&gt;|t|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       homework |<span class="stres">   2.234407   .5931955     3.77   0.001     1.004195    3.464619</span>
+            ses |<span class="stres">   4.462329   .7662626     5.82   0.000     2.873198    6.051461</span>
+          ratio |<span class="stres">   .0741481   .2716558     0.27   0.787    -.4892315    .6375278</span>
+                |
+        schtype |
+       Private  |<span class="stres">          0</span>  (base)
+        Public  |<span class="stres">     5.3203   6.666345     0.80   0.433    -8.504853    19.14545</span>
+                |
+schtype#c.ratio |
+        Public  |<span class="stres">  -.3979843   .3025005    -1.32   0.202    -1.025332    .2293634</span>
+                |
+          _cons |<span class="stres">   46.96202    6.67312     7.04   0.000     33.12282    60.80122</span>
+---------------------------------------------------------------------------------

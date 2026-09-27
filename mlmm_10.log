@@ -1,0 +1,5 @@
+<span class="stinp">. predict yhat1, fitted</span>
+
+<span class="stinp">. sort schid homework</span>
+
+<span class="stinp">. twoway (line yhat1 homework, connect(ascending))</span>

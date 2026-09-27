@@ -1,0 +1,31 @@
+<span class="stinp">. mixed math homework || schid: homework, cov(unstructured) stddev</span>
+
+Mixed-effects ML regression                          Number of obs    = <span class="stres">   519</span>
+Group variable: <span class="stres">schid                                </span>Number of groups = <span class="stres">    23</span>
+                                                     Obs per group:
+                                                                  min = <span class="stres">     5</span>
+                                                                  avg = <span class="stres">  22.6</span>
+                                                                  max = <span class="stres">    67</span>
+<span class="stres">                                                     </span>Wald chi2(<span class="stres">1</span>)     = <span class="stres">  4.81</span>
+Log likelihood = <span class="stres">-1819.5183                          </span>Prob &gt; chi2      = <span class="stres">0.0283</span>
+
+--------------------------------------------------------------------------------------
+                math | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]
+---------------------+----------------------------------------------------------------
+            homework |<span class="stres">   1.986881    .906006     2.19   0.028     .2111418     3.76262</span>
+               _cons |<span class="stres">   46.32253   1.719467    26.94   0.000     42.95244    49.69262</span>
+--------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+<span class="stres">schid</span>: Unstructured          |
+                sd(homework) |<span class="stres">   4.097111   .7128096      2.913311    5.761938</span>
+                   sd(_cons) |<span class="stres">   7.699646   1.297697      5.533621    10.71352</span>
+        corr(homework,_cons) |<span class="stres">  -.8289898   .0741118     -.9287627   -.6172109</span>
+-----------------------------+------------------------------------------------
+                sd(Residual) |<span class="stres">   7.300516   .2374073      6.849724    7.780974</span>
+------------------------------------------------------------------------------
+LR test vs. linear model: chi2(<span class="stres">3</span>) = <span class="stres">186.16                </span>Prob &gt; chi2 = <span class="stres">0.0000</span>
+
+Note: LR test is conservative and provided only for reference.

@@ -1,0 +1,38 @@
+<span class="stinp">. use math </span>
+
+<span class="stinp">. list in 50/60, sepby(schid)</span>
+
+     +---------------------------------------------------+
+     | <span class="stres">schid     ses   homework   schtype   ratio   math </span>|
+     |---------------------------------------------------|
+ 50. | <span class="stres"> 6327     .56          1   Private      23     56 </span>|
+ 51. | <span class="stres"> 6327       1          1   Private      23     61 </span>|
+ 52. | <span class="stres"> 6327    -.44          3   Private      23     39 </span>|
+     |---------------------------------------------------|
+ 53. | <span class="stres"> 6467    -.27          0   Private      19     42 </span>|
+ 54. | <span class="stres"> 6467   -1.07          1   Private      19     46 </span>|
+ 55. | <span class="stres"> 6467     -.3          3   Private      19     61 </span>|
+ 56. | <span class="stres"> 6467    -.49          3   Private      19     67 </span>|
+ 57. | <span class="stres"> 6467    1.16          4   Private      19     67 </span>|
+     |---------------------------------------------------|
+ 58. | <span class="stres"> 7194     .25          0    Public      21     42 </span>|
+ 59. | <span class="stres"> 7194    -.53          0    Public      21     43 </span>|
+ 60. | <span class="stres"> 7194    -.89          0    Public      21     62 </span>|
+     +---------------------------------------------------+
+
+<span class="stinp">. codebook schid</span>
+
+------------------------------------------------------------------------------------------
+<span class="stres">schid                                                                            School ID</span>
+------------------------------------------------------------------------------------------
+
+                  Type: Numeric (<span class="stres">float</span>)
+
+                 Range: [<span class="stres">6053</span>,<span class="stres">72991</span>]                  Units: <span class="stres">1</span>
+<span class="stres">         </span>Unique values: <span class="stres">23                        </span>Missing .: <span class="stres">0</span>/<span class="stres">519</span>
+
+                  Mean: <span class="stres">35488.7</span>
+             Std. dev.: <span class="stres">26056.7</span>
+
+           Percentiles:     10%       25%       50%       75%       90%
+<span class="stres">                           6327      7801     25642     62821     72080</span>

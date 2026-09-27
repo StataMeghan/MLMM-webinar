@@ -1,0 +1,8 @@
+<span class="stinp">. predict u, reffects reses(s)</span>
+
+<span class="stinp">. egen tagme = tag(schid)</span>
+
+<span class="stinp">. egen rank = rank(u) if tagme</span>
+(496 missing values generated)
+
+<span class="stinp">. serrbar u s rank if tagme, scale(1.96) yline(0) mvopts(mlabel(schid))</span>

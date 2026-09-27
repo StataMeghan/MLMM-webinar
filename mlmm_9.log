@@ -1,0 +1,27 @@
+<span class="stinp">. mixed math homework || schid: , stddev</span>
+
+Mixed-effects ML regression                          Number of obs    = <span class="stres">   519</span>
+Group variable: <span class="stres">schid                                </span>Number of groups = <span class="stres">    23</span>
+                                                     Obs per group:
+                                                                  min = <span class="stres">     5</span>
+                                                                  avg = <span class="stres">  22.6</span>
+                                                                  max = <span class="stres">    67</span>
+<span class="stres">                                                     </span>Wald chi2(<span class="stres">1</span>)     = <span class="stres"> 75.32</span>
+Log likelihood = <span class="stres"> -1865.247                          </span>Prob &gt; chi2      = <span class="stres">0.0000</span>
+
+------------------------------------------------------------------------------
+        math | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    homework |<span class="stres">   2.401972   .2767745     8.68   0.000     1.859504     2.94444</span>
+       _cons |<span class="stres">   46.34945   1.141154    40.62   0.000     44.11283    48.58607</span>
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+<span class="stres">schid</span>: Identity              |
+                   sd(_cons) |<span class="stres">   4.497318   .7861623      3.192696    6.335042</span>
+-----------------------------+------------------------------------------------
+                sd(Residual) |<span class="stres">   8.434685   .2677724      7.925855    8.976181</span>
+------------------------------------------------------------------------------
+LR test vs. linear model: chibar2(01) = <span class="stres">94.71         </span>Prob &gt;= chibar2 = <span class="stres">0.0000</span>
