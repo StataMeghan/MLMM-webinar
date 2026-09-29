@@ -240,9 +240,9 @@ schtype#c.ratio |
                         <li>Linear regression doesn't allow us to answer questions about both the individual and cluster levels.</li>
                         <li>For example, we might want to know:</li>
                         <ul>
-                            <li>How much of a student's math score is dictated by their own characteristics versus the school they attend?</li>
-                            <li>Does the impact of a specialized math tutoring program on test scores vary from school to school?</li>
-                            <li>Does a student's own family income improve their grades, or does simply attending a school with a high average family income provide a separate, additional boost?</li>
+                            <li><span style="color: #7D9CCA;">How much of a student's math score is dictated by their own characteristics versus the school they attend?</span></li>
+                            <li><span style="color: #7D9CCA;">Does the impact of a specialized math tutoring program on test scores vary from school to school?</span></li>
+                            <li><span style="color: #7D9CCA;">Does a student's own family income improve their grades, or does simply attending a school with a high average family income provide a separate, additional boost?</span></li>
                         </ul>
                         <li>The solution to this problem is to use multilevel/mixed-effects models (MLMMs).</li>
                         <ul>
@@ -568,3 +568,71 @@ Note: LR test is conservative and provided only for reference.
         </script>
     </body>
 </html>
+
+<style>
+.stata-zoom-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  cursor: zoom-out;
+}
+
+.stata-zoom-overlay pre {
+  /* Removed the hardcoded background/color from here */
+  padding: 25px;
+  border-radius: 8px;
+  max-width: 95vw;
+  max-height: 95vh;
+  overflow: auto;
+  font-size: 1.5rem !important; 
+  line-height: 1.4;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  cursor: auto;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const pres = document.querySelectorAll("pre");
+  
+  pres.forEach(function(pre) {
+    if (pre.querySelector("samp")) {
+      
+      pre.style.cursor = "zoom-in";
+      pre.title = "Click to enlarge";
+      
+      pre.addEventListener("click", function(e) {
+        e.stopPropagation(); 
+        
+        const overlay = document.createElement("div");
+        overlay.className = "stata-zoom-overlay";
+        
+        const clone = pre.cloneNode(true);
+        
+        // Copy exact background and text color from the original block
+        const originalStyles = window.getComputedStyle(pre);
+        clone.style.backgroundColor = originalStyles.backgroundColor;
+        clone.style.color = originalStyles.color;
+        
+        overlay.addEventListener("click", function() {
+          overlay.remove();
+        });
+        
+        clone.addEventListener("click", function(e) {
+          e.stopPropagation();
+        });
+        
+        overlay.appendChild(clone);
+        
+        // Append to the presentation container if it exists to maintain CSS scope
+        const presentationContainer = document.querySelector('.reveal') || document.body;
+        presentationContainer.appendChild(overlay);
+      });
+    }
+  });
+});
+</script>
