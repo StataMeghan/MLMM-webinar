@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <title>Intro to MLMM</title>
-
+        <link rel="icon" type="image/svg+xml" href="png/icon-white.svg" sizes="any">
         <link rel="stylesheet" href="dist/reset.css" />
         <link rel="stylesheet" href="dist/reveal.css" />
         <link rel="stylesheet" href="stata-webinar.css" />
@@ -96,7 +96,8 @@
                         <li>In this dataset, we have 519 students (level 1) nested within 23 schools (level 2).</li>
                     </ul>
                     <div class="stata-example">
-<pre id="stlog-1" class="stlog"><samp><span class="stinp">. use math </span>
+
+<pre id="stlog-1" class="stlog"><samp><span class="stinp">. use math</span>
 
 <span class="stinp">. list in 50/60, sepby(schid)</span>
 
@@ -135,6 +136,7 @@
            Percentiles:     10%       25%       50%       75%       90%
 <span class="stres">                           6327      7801     25642     62821     72080</span>
 </samp></pre>
+
                     </div>
                 </section>
 
@@ -146,6 +148,7 @@
                     <div class="twocolumn">
                         <div>
                             <div class="stata-example">
+
 <pre id="stlog-2" class="stlog"><samp><span class="stinp">. regress math homework ses c.ratio##schtype</span>
 
       Source |       SS           df       MS      Number of obs   =<span class="stres">       519</span>
@@ -172,14 +175,18 @@ schtype#c.ratio |
           _cons |<span class="stres">   46.96202   2.101312    22.35   0.000     42.83378    51.09026</span>
 ---------------------------------------------------------------------------------
 </samp></pre>
+
                             </div>
                         </div>
                         <div>
                             <div class="stata-example">
-                                <pre id="stlog-3" class="stlog"><samp><span class="stinp">. quietly  margins, at(homework=(0/7)) plot</span></samp></pre>
-                                <figure id="fig-3">
-                                    <a href="mlmm_3.svg"><img alt="mlmm_3.svg" src="mlmm_3.svg"/></a>
-                                </figure>
+                                
+<pre id="stlog-3" class="stlog"><samp><span class="stinp">. quietly  margins, at(homework=(0/7)) plot</span>
+</samp></pre>
+<figure id="fig-3">
+<a href="mlmm_3.svg"><img alt="mlmm_3.svg" src="mlmm_3.svg"/></a>
+</figure>
+
                             </div>
                         </div>
                     </div>
@@ -201,9 +208,10 @@ schtype#c.ratio |
                             <li>biased test statistics</li>
                             <li>inflated Type I error rates</li>
                         </ul>
-                        <li>The easiest solution is to use cluster-robust standard errors to correct the standard errors and test statistics of the regression coefficients.</li>
+                        <li class="fragment">The easiest solution is to use cluster-robust standard errors to correct the standard errors and test statistics of the regression coefficients.</li>
                     </ul>
-                    <div class="stata-example">
+                    <div class="fragment stata-example">
+
 <pre id="stlog-4" class="stlog"><samp><span class="stinp">. regress math homework ses c.ratio##schtype, vce(cluster schid)</span>
 
 Linear regression                               Number of obs     = <span class="stres">       519</span>
@@ -231,27 +239,31 @@ schtype#c.ratio |
           _cons |<span class="stres">   46.96202    6.67312     7.04   0.000     33.12282    60.80122</span>
 ---------------------------------------------------------------------------------
 </samp></pre>
+
                     </div>
                 </section>
 
-                <section class="column-slide">
-                    <h1>Problem 2</h1>
-                    <ul>
-                        <li>Linear regression doesn't allow us to answer questions about both the individual and cluster levels.</li>
-                        <li>For example, we might want to know:</li>
-                        <ul>
-                            <li><span style="color: #7D9CCA;">How much of a student's math score is dictated by their own characteristics versus the school they attend?</span></li>
-                            <li><span style="color: #7D9CCA;">Does the impact of a specialized math tutoring program on test scores vary from school to school?</span></li>
-                            <li><span style="color: #7D9CCA;">Does a student's own family income improve their grades, or does simply attending a school with a high average family income provide a separate, additional boost?</span></li>
-                        </ul>
-                        <li>The solution to this problem is to use multilevel/mixed-effects models (MLMMs).</li>
-                        <ul>
-                            <li>MLMMs provide correct standard errors and test statistics.</li>
-                            <li>MLMMs can model variation at both the individual and cluster levels.</li>
-                        </ul>
-                        <li>Also known as variance-component models or hierarchical linear models (HLM), this modeling framework incorporates both fixed and random effects.</li>
-                    </ul>
-                </section>
+<section class="column-slide">
+    <h1>Problem 2</h1>
+    <ul>
+        <li>Linear regression doesn't allow us to answer questions about both the individual and cluster levels.</li>
+        <li>For example, we might want to know:
+            <!-- FIXED: Nested sub-lists must be inside the <li> tag -->
+            <ul>
+                <li class="fragment"><span style="color: #7D9CCA;">How much of a student's math score is dictated by their own characteristics versus the school they attend?</span></li>
+                <li class="fragment"><span style="color: #7D9CCA;">Does the impact of a specialized math tutoring program on test scores vary from school to school?</span></li>
+                <li class="fragment"><span style="color: #7D9CCA;">Does a student's own family income improve their grades, or does simply attending a school with a high average family income provide a separate, additional boost?</span></li>
+            </ul>
+        </li>
+        <!-- FIXED: Removed the <div> and placed the fragment class directly on the parent <li> -->
+        <li class="fragment">The solution to this problem is to use multilevel/mixed-effects models (MLMMs).
+            <ul>
+                <li>MLMMs provide correct standard errors and test statistics.</li>
+                <li>MLMMs can model variation at both the individual and cluster levels.</li>
+            </ul>
+        </li>
+    </ul>
+</section>
 
                 <section class="column-slide">
                     <h1>Random effects</h1>
@@ -261,8 +273,8 @@ schtype#c.ratio |
                     </ul> 
                     <img src="png/inference.svg" alt="Random Effects Diagram" class="diagram-img">
                 </section>
-
-                <section class="column-slide">
+<section>
+                <section class="column-slide" data-transition="none">
                     <h1>Multilevel/mixed-effects models (MLMMs)</h1> 
                     <div class="twocolumn"> 
                         <div>
@@ -279,6 +291,62 @@ schtype#c.ratio |
                         </div>
                     </div>
                 </section>
+                
+                <section class="column-slide" data-transition="none">
+                    <h1>Multilevel/mixed-effects models (MLMMs)</h1> 
+                    <div class="twocolumn"> 
+                        <div>
+                            <p>MLMMs disaggregate the variance in the outcome variable into observation-level and cluster-level components.</p>
+                            <ul>
+                                <li><strong>Fixed-effect</strong> coefficients estimate average effects across all clusters.</li>
+                                <li><strong>Random-effect</strong> coefficients capture variation in the outcome variable at the cluster level.</li>
+                                <li><strong>Level-1 residuals</strong> capture the remaining variation in the outcome variable at the observation level.</li>
+                            </ul>
+                            $$y_{ij} = \beta_0 + \beta_1 x_{ij} + \epsilon_{ij}$$
+                        </div>
+                        <div>
+                            <img src="png/graph1.svg" alt="MLMM Diagram" class="diagram-img">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="column-slide" data-transition="none">
+                    <h1>Multilevel/mixed-effects models (MLMMs)</h1> 
+                    <div class="twocolumn"> 
+                        <div>
+                            <p>MLMMs disaggregate the variance in the outcome variable into observation-level and cluster-level components.</p>
+                            <ul>
+                                <li><strong>Fixed-effect</strong> coefficients estimate average effects across all clusters.</li>
+                                <li><strong>Random-effect</strong> coefficients capture variation in the outcome variable at the cluster level.</li>
+                                <li><strong>Level-1 residuals</strong> capture the remaining variation in the outcome variable at the observation level.</li>
+                            </ul>
+                            $$y_{ij} = \beta_0 + \beta_1 x_{ij} + u_{0j} + \epsilon_{ij}$$
+                        </div>
+                        <div>
+                            <img src="png/graph2.svg" alt="MLMM Diagram" class="diagram-img">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="column-slide" data-transition="none">
+                    <h1>Multilevel/mixed-effects models (MLMMs)</h1> 
+                    <div class="twocolumn"> 
+                        <div>
+                            <p>MLMMs disaggregate the variance in the outcome variable into observation-level and cluster-level components.</p>
+                            <ul>
+                                <li><strong>Fixed-effect</strong> coefficients estimate average effects across all clusters.</li>
+                                <li><strong>Random-effect</strong> coefficients capture variation in the outcome variable at the cluster level.</li>
+                                <li><strong>Level-1 residuals</strong> capture the remaining variation in the outcome variable at the observation level.</li>
+                            </ul>
+                            $$y_{ij} = \beta_0 + \beta_1 x_{ij} + u_{0j} + u_{1j} x_{ij} + \epsilon_{ij}$$
+                        </div>
+                        <div>
+                            <img src="png/graph3.svg" alt="MLMM Diagram" class="diagram-img">
+                        </div>
+                    </div>
+                </section>
+
+                </section>
 
                 <section class="column-slide">
                     <h1>MLMMs in Stata</h1>
@@ -287,6 +355,7 @@ schtype#c.ratio |
                         <div>
                             <p>The <span class="stata-code">xtreg</span> command is simpler to use and is suitable for basic random-intercept models.</p> 
                             <div class="stata-example">
+
 <pre id="stlog-5" class="stlog"><samp><span class="stinp">. xtset schid</span>
 
 Panel variable: <span class="stres">schid</span> (unbalanced)
@@ -326,11 +395,13 @@ schtype#c.ratio |
 ---------------------------------------------------------------------------------
 LR test of sigma_u=0: chibar2(01) = <span class="stres">33.06              </span>Prob &gt;= chibar2 = <span class="stres">0.000</span>
 </samp></pre>
+
                             </div>
                         </div>
                         <div>
                             <p>The <span class="stata-code">mixed</span> command is more flexible and allows for more complex model specifications.</p>
                             <div class="stata-example">
+
 <pre id="stlog-6" class="stlog"><samp><span class="stinp">. mixed math homework ses c.ratio##schtype || schid: , stddev</span>
 
 Mixed-effects ML regression                          Number of obs    = <span class="stres">   519</span>
@@ -379,26 +450,37 @@ Residual intraclass correlation
                        schid |<span class="stres">   .1228263   .0445853      .0585792    .2396032</span>
 ------------------------------------------------------------------------------
 </samp></pre>
+
                             </div>
                         </div>
                     </div>
                 </section>
 
+                 <section class="column-slide">
+                    <h1>MLMMs in Stata</h1>
+                    <div>
+                            <img src="png/mlmm.gif" alt="Point and click"  height="60%">
+                        </div>
+                 </section>
                 <section class="column-slide">
                     <h1>Interpretation of results</h1>
                     <div class="twocolumn">
                         <div>
                             <p>We interpret the fixed-effect coefficients as the average expected change in the outcome with a one-unit increase in the predictor, holding all other predictors constant.</p>
                             <div class="stata-example">
-                                <pre id="stlog-7" class="stlog"><samp><span class="stinp">. quietly margins, at(homework=(0/7)) plot</span></samp></pre>
-                                <figure id="fig-7">
-                                    <a href="mlmm_7.svg"><img alt="mlmm_7.svg" src="mlmm_7.svg"/></a>
-                                </figure>
+                                
+<pre id="stlog-7" class="stlog"><samp><span class="stinp">. quietly margins, at(homework=(0/7)) plot</span>
+</samp></pre>
+<figure id="fig-7">
+<a href="mlmm_7.svg"><img alt="mlmm_7.svg" src="mlmm_7.svg"/></a>
+</figure>
+
                             </div>
                         </div>
                         <div>
                             <p>We interpret the random-effects as the difference between the average effect across all clusters and the effect in that particular cluster.</p>
                             <div class="stata-example">
+
 <pre id="stlog-8" class="stlog"><samp><span class="stinp">. predict u, reffects reses(s)</span>
 
 <span class="stinp">. egen tagme = tag(schid)</span>
@@ -408,9 +490,10 @@ Residual intraclass correlation
 
 <span class="stinp">. serrbar u s rank if tagme, scale(1.96) yline(0) mvopts(mlabel(schid))</span>
 </samp></pre>
-                                <figure id="fig-8">
-                                    <a href="mlmm_8.svg"><img alt="mlmm_8.svg" src="mlmm_8.svg"/></a>
-                                </figure>
+<figure id="fig-8">
+<a href="mlmm_8.svg"><img alt="mlmm_8.svg" src="mlmm_8.svg"/></a>
+</figure>
+
                             </div>
                         </div>
                     </div>
@@ -421,6 +504,7 @@ Residual intraclass correlation
                     <div class="twocolumn">
                         <div>
                             <div class="stata-example">
+
 <pre id="stlog-9" class="stlog"><samp><span class="stinp">. mixed math homework || schid: , stddev</span>
 
 Mixed-effects ML regression                          Number of obs    = <span class="stres">   519</span>
@@ -449,19 +533,22 @@ Log likelihood = <span class="stres"> -1865.247                          </span>
 ------------------------------------------------------------------------------
 LR test vs. linear model: chibar2(01) = <span class="stres">94.71         </span>Prob &gt;= chibar2 = <span class="stres">0.0000</span>
 </samp></pre>
+
                             </div>
                         </div>
                         <div>
                             <div class="stata-example">
+
 <pre id="stlog-10" class="stlog"><samp><span class="stinp">. predict yhat1, fitted</span>
 
 <span class="stinp">. sort schid homework</span>
 
 <span class="stinp">. twoway (line yhat1 homework, connect(ascending))</span>
 </samp></pre>
-                                <figure id="fig-10">
-                                    <a href="mlmm_10.svg"><img alt="mlmm_10.svg" src="mlmm_10.svg"/></a>
-                                </figure>
+<figure id="fig-10">
+<a href="mlmm_10.svg"><img alt="mlmm_10.svg" src="mlmm_10.svg"/></a>
+</figure>
+
                             </div>
                         </div>
                     </div>
@@ -472,6 +559,7 @@ LR test vs. linear model: chibar2(01) = <span class="stres">94.71         </span
                     <div class="twocolumn">
                         <div>
                             <div class="stata-example">
+
 <pre id="stlog-11" class="stlog"><samp><span class="stinp">. mixed math homework || schid: homework, cov(unstructured) stddev</span>
 
 Mixed-effects ML regression                          Number of obs    = <span class="stres">   519</span>
@@ -504,19 +592,22 @@ LR test vs. linear model: chi2(<span class="stres">3</span>) = <span class="stre
 
 Note: LR test is conservative and provided only for reference.
 </samp></pre>
+
                             </div>
                         </div>
                         <div>
                             <div class="stata-example">
+
 <pre id="stlog-12" class="stlog"><samp><span class="stinp">. predict yhat2, fitted</span>
 
 <span class="stinp">. sort schid homework</span>
 
 <span class="stinp">. twoway (line yhat2 homework, connect(ascending))</span>
 </samp></pre>
-                                <figure id="fig-12">
-                                    <a href="mlmm_12.svg"><img alt="mlmm_12.svg" src="mlmm_12.svg"/></a>
-                                </figure>
+<figure id="fig-12">
+<a href="mlmm_12.svg"><img alt="mlmm_12.svg" src="mlmm_12.svg"/></a>
+</figure>
+
                             </div>
                         </div>
                     </div>
