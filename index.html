@@ -199,21 +199,22 @@ schtype#c.ratio |
                     </div>
                 </section>
 
-                <section class="column-slide">
-                    <h1>Problem 1</h1>
-                    <ul>
-                        <li>Nested data structures violate the independence assumption of linear regression, leading to:</li>
-                        <ul>
-                            <li>biased standard errors</li>
-                            <li>biased test statistics</li>
-                            <li>inflated Type I error rates</li>
-                        </ul>
-                        <div class="fragment">
-                        <li>The easiest solution is to use cluster-robust standard errors to correct the standard errors and test statistics of the regression coefficients.</li>
-                    </ul>
-                    <div class="stata-example">
-
-<pre id="stlog-4" class="stlog"><samp><span class="stinp">. regress math homework ses c.ratio##schtype, vce(cluster schid)</span>
+               <section class="column-slide">
+    <h1>Problem 1</h1>
+    <ul>
+        <li>Nested data structures violate the independence assumption of linear regression, leading to:</li>
+        <ul>
+            <li>biased standard errors</li>
+            <li>biased test statistics</li>
+            <li>inflated Type I error rates</li>
+        </ul>
+        <!-- 1. Add fragment and index 1 to the list item -->
+        <li class="fragment" data-fragment-index="1">The easiest solution is to use cluster-robust standard errors to correct the standard errors and test statistics of the regression coefficients.</li>
+    </ul>
+    
+    <!-- 2. Add fragment and index 1 to the Stata div -->
+    <div class="stata-example fragment" data-fragment-index="1">
+        <pre id="stlog-4" class="stlog"><samp><span class="stinp">. regress math homework ses c.ratio##schtype, vce(cluster schid)</span>
 
 Linear regression                               Number of obs     = <span class="stres">       519</span>
 <span class="stres">                                                </span>F(5, 22)          =  <span class="stres">    36.41</span>
@@ -240,9 +241,8 @@ schtype#c.ratio |
           _cons |<span class="stres">   46.96202    6.67312     7.04   0.000     33.12282    60.80122</span>
 ---------------------------------------------------------------------------------
 </samp></pre>
-                    </div>
-                    </div>
-                </section>
+    </div>
+</section>
 
 <section class="column-slide">
     <h1>Problem 2</h1>
