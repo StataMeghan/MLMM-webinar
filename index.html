@@ -208,9 +208,10 @@ schtype#c.ratio |
                             <li>biased test statistics</li>
                             <li>inflated Type I error rates</li>
                         </ul>
-                        <li class="fragment">The easiest solution is to use cluster-robust standard errors to correct the standard errors and test statistics of the regression coefficients.</li>
+                        <div class="fragment">
+                        <li>The easiest solution is to use cluster-robust standard errors to correct the standard errors and test statistics of the regression coefficients.</li>
                     </ul>
-                    <div class="fragment stata-example">
+                    <div class="stata-example">
 
 <pre id="stlog-4" class="stlog"><samp><span class="stinp">. regress math homework ses c.ratio##schtype, vce(cluster schid)</span>
 
@@ -239,7 +240,7 @@ schtype#c.ratio |
           _cons |<span class="stres">   46.96202    6.67312     7.04   0.000     33.12282    60.80122</span>
 ---------------------------------------------------------------------------------
 </samp></pre>
-
+                    </div>
                     </div>
                 </section>
 
@@ -257,7 +258,7 @@ schtype#c.ratio |
         </li>
         <!-- FIXED: Removed the <div> and placed the fragment class directly on the parent <li> -->
         <li class="fragment">The solution to this problem is to use multilevel/mixed-effects models (MLMMs).</li>
-            <ul>
+            <ul class="fragment">
                 <li>MLMMs provide correct standard errors and test statistics.</li>
                 <li>MLMMs can model variation at both the individual and cluster levels.</li>
             </ul>
